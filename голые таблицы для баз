@@ -1,0 +1,41 @@
+mysql
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS posts(
+   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+   title VARCHAR(100) NOT NULL,
+   description TEXT,
+   user_id INT NOT NULL,
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   FOREIGN KEY (user_id)  REFERENCES users (id)
+);
+
+
+
+pgsql
+
+CREATE TABLE "users"
+(
+  id serial primary key,
+  name  VARCHAR(40) not null,
+  password VARCHAR(40) NOT NULL
+)
+
+
+CREATE TABLE "posts" (
+   id serial primary key,
+   title VARCHAR(40) not null,
+   description TEXT,
+   user_id INTEGER NOT NULL,
+   created_at timestamp NOT NULL DEFAULT NOW(),
+   FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+
+
