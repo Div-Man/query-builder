@@ -97,11 +97,98 @@ $result = $db->table('posts')->select(['id', 'title'])->get();
 $result = $db->table('posts')->select(['id', 'title'])->limit(3)->get();
 $result = $db->table('posts')->select(['id', 'title'])->orderBy('created_at')->limit(3)->get();
 $result = $db->table('posts')->select(['*'])->get();
+
+//Количество постов, по одинакому времени создания
+$result = $db->table('posts')->select(['created_at, count(posts.id) as count_post'])->groupBy('created_at');
 ```
 ***
 
-Джоины
+**Джоины**
 
-Вывести посты и его автора
+Вывести посты и его автора:
+
+```php
+ $users = $db->table('posts')
+  ->join('users', 'posts.user_id', 'users.id')->orderBy('posts.user_id')->get();
+  ```
+  Количество постов у всех юзеров:
+  ```php
+  $post = $db->table('users')
+  ->leftJoin('posts', 'posts.user_id', 'users.id')->select(['users.name, count(posts.id) as count_post'])
+  ->groupBy('users.name');
+   ```
+   Количество постов у определённого юзера:
+   
+   ```php
+   $post = $db->table('users')->select(['users.name, count(posts.id) as count_post'])
+  ->leftJoin('posts', 'posts.user_id', 'users.id')->where('users.id', '=', 1)->groupBy('users.name');
+  ```
+  ***
+
+**INSERT**
+
+Массовая вставка:
+```php
+$newUser = $db->table('users')->insert([
+    ['name' => 'Иван', 'password' => '1133311111661'],
+    ['name' => 'Егор','password' => 'fgtbnn'],
+  ]);
+ ```
+ 
+```php
+$newPost = $db->table('posts')->insert([
+    [
+        'title' => 'Новая запись',
+        'description' => 'текст текст текст текст',
+        'user_id' => 2
+    ],
+    [
+        'title' => 'Про то и сё',
+        'description' => 'Очень интересно прочитать',
+        'user_id' => 2
+    ],
+    [
+        'title' => 'Без названия',
+        'description' => 'Как-то раз, вместо школы, я пошёл гулять.',
+        'user_id' => 1
+    ],
+    [
+        'title' => 'Ёлки в лесу',
+        'description' => 'текст текст текст',
+        'user_id' => 2
+    ],
+    [
+        'title' => 'Изучение языков',
+        'description' => 'бла бла бла бла бла',
+        'user_id' => 2
+    ]
+]);
+```
+
+Вставка одного массива:
+
+```php
+$newUser = $db->table('users')->insert(
+    ['name' => 'Настя','password' => 'qqq']
+);
+```
+
+**UPDATE**
+
+```php
+$updateUser = $db->table('users')
+    ->where('id', '=', 1)
+    ->update([
+        'password' => 'zxcvqwer'
+]);
+```
+
+**DELETE**
+
+```php
+$deleteUser = $db->table('users')->where('id', '=', '3')->delete();
+```
+  
+  
 
 
